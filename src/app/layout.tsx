@@ -16,8 +16,26 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeInjector } from "@/components/theme-injector";
 
 export const metadata: Metadata = {
-  title: "Shadcn UI Theme Generator",
-  description: "Generate and preview Shadcn UI themes dynamically.",
+  title: "Hyper-Premium Shadcn UI Theme Generator | Tailwind v3 & v4",
+  description: "The ultimate developer tool for generating, previewing, and exporting Shadcn UI themes. Supports Tailwind v3 and v4, 14+ premium presets, and custom Google Fonts.",
+  keywords: ["shadcn ui", "theme generator", "tailwind v4", "tailwind v3", "css variables", "design system", "nextjs", "frontend tools"],
+  authors: [{ name: "Peter Dinis" }],
+  openGraph: {
+    title: "Hyper-Premium Shadcn UI Theme Generator",
+    description: "Generate and preview Shadcn UI themes dynamically with Tailwind v4 support.",
+    type: "website",
+    url: "https://theme-generator.example.com",
+    siteName: "Shadcn Theme Generator",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shadcn UI Theme Generator",
+    description: "The ultimate tool for Shadcn UI themes.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
