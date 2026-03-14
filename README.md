@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 Hyper-Premium Shadcn UI Theme Generator
 
-## Getting Started
+A professional-grade design system tool for generating, previewing, and exporting Shadcn UI themes with support for **Tailwind v3** and **Tailwind v4**.
 
-First, run the development server:
+![Theme Generator Preview](https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **🚀 Dual Tailwind Support**: Seamlessly export themes for both Tailwind v3 (standard CSS variables) and Tailwind v4 (@theme block API).
+- **🎭 14+ Premium Presets**: Carefully curated themes including Cyberpunk, Midnight Azure, Emerald Night, Royal Purple, and Coffee & Cream.
+- **🔡 Custom Google Fonts**: Integrated font selection (Inter, Geist, Playfair Display, etc.) with instant live preview.
+- **📊 Advanced Component Previews**:
+  - **Dashboard**: High-level overview of core UI elements.
+  - **Data Table**: Full-featured shadcn/ui data table with sorting and filtering.
+  - **Interactions Lab**: Test stateful components like Buttons, Badges, and Sliders.
+- **📥 Theme Portability**: Full JSON Import/Export support to save and share your design systems.
+- **💎 Glassmorphic UI**: A high-end, developer-focused interface with sophisticated typography and micro-interactions.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: [Next.js 15+](https://nextjs.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Components**: [Shadcn UI](https://ui.shadcn.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Colors**: [OKLCH](https://oklch.com/) for superior color management.
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone the repository**
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+4. **Open [http://localhost:3000](http://localhost:3000)** in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📦 How to Use
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Customize**: Use the sidebar to tweak colors, radius, and choose your preferred font.
+2. **Preview**: Switch between the **Components**, **Data Table**, and **Interactions** tabs to see your theme in action.
+3. **Export**: Click the **Export Theme** button, select your Tailwind version (v3 or v4), and copy the CSS variables into your `globals.css`.
 
-## Deploy on Vercel
+## 📜 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
