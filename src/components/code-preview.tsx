@@ -1,17 +1,49 @@
 "use client";
 
-import { Check, Copy, Download, Info, Upload } from "lucide-react";
+import type { ChangeEvent } from "react";
+import { Check, Copy, Download, Upload } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { useThemeStore } from "@/lib/store";
-import { cn } from "@/lib/utils";
+import {
+	getComponentsJsonStub,
+	getShadcnInitCommand,
+	SCAFFOLD_TEMPLATES,
+	UI_TEMPLATE_META,
+	type ScaffoldTemplate,
+} from "@/lib/ui-template";
 
 export function CodePreview() {
-	const { config, setConfig } = useThemeStore();
+	const {
+		config,
+		setConfig,
+		uiTemplate,
+		scaffoldTemplate,
+		setScaffoldTemplate,
+	} = useThemeStore();
 	const [copied, setCopied] = useState<string | null>(null);
 	const [version, setVersion] = useState<"v3" | "v4">("v4");
+
+	const initCommand = getShadcnInitCommand({
+		uiTemplate,
+		scaffoldTemplate,
+	});
+	const componentsStub = getComponentsJsonStub({ uiTemplate });
 
 	const getCss = (v: "v3" | "v4") => {
 		if (v === "v4") {
@@ -72,7 +104,7 @@ export function CodePreview() {
 		URL.revokeObjectURL(url);
 	};
 
-	const importJson = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const importJson = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 		const reader = new FileReader();
@@ -80,7 +112,7 @@ export function CodePreview() {
 			try {
 				const json = JSON.parse(event.target?.result as string);
 				setConfig(json);
-			} catch (err) {
+			} catch {
 				alert("Invalid theme JSON");
 			}
 		};
@@ -88,9 +120,9 @@ export function CodePreview() {
 	};
 
 	return (
-		<div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+		<div className="animate-in fade-in slide-in-from-bottom-4 space-y-8 duration-500">
 			<div className="flex items-center justify-between">
-				<h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
+				<h3 className="text-sm font-bold tracking-widest text-muted-foreground uppercase">
 					Export / Import
 				</h3>
 				<div className="flex items-center gap-2">
@@ -100,7 +132,7 @@ export function CodePreview() {
 						onClick={downloadJson}
 						className="h-8 gap-2"
 					>
-						<Download className="w-3.5 h-3.5" />
+						<Download className="size-3.5" />
 						Download JSON
 					</Button>
 					<div className="relative">
@@ -108,42 +140,140 @@ export function CodePreview() {
 							type="file"
 							accept=".json"
 							onChange={importJson}
-							className="absolute inset-0 opacity-0 cursor-pointer w-full"
+							className="absolute inset-0 w-full cursor-pointer opacity-0"
 							title="Import JSON"
 						/>
 						<Button
 							variant="outline"
 							size="sm"
-							className="h-8 gap-2 cursor-pointer pointer-events-none"
+							className="pointer-events-none h-8 gap-2 cursor-pointer"
 						>
-							<Upload className="w-3.5 h-3.5" />
+							<Upload className="size-3.5" />
 							Import JSON
 						</Button>
 					</div>
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+			<Card size="sm" className="border-border/70 bg-muted/10 shadow-none">
+				<CardHeader className="pb-2">
+					<CardTitle className="text-sm">Shadcn CLI template</CardTitle>
+					<CardDescription className="text-xs leading-relaxed">
+						Matches{" "}
+						<a
+							href={UI_TEMPLATE_META[uiTemplate].docsPath}
+							target="_blank"
+							rel="noreferrer"
+							className="font-medium text-primary underline-offset-4 hover:underline"
+						>
+							shadcn init
+						</a>{" "}
+						(<strong>{UI_TEMPLATE_META[uiTemplate].label}</strong>
+						). Framework is only for the{" "}
+						<code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">
+							-t
+						</code>{" "}
+						flag; your theme CSS still applies the same way.
+					</CardDescription>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+						<div className="min-w-0 flex-1 space-y-2">
+							<Label
+								htmlFor="scaffold-template"
+								className="text-xs font-medium text-muted-foreground"
+							>
+								Framework template (
+								<code className="font-mono text-[10px]">-t</code>)
+							</Label>
+							<Select
+								value={scaffoldTemplate}
+								onValueChange={(v) =>
+									v && setScaffoldTemplate(v as ScaffoldTemplate)
+								}
+							>
+								<SelectTrigger id="scaffold-template" className="h-9 w-full text-xs">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									{SCAFFOLD_TEMPLATES.map((t) => (
+										<SelectItem key={t.value} value={t.value} className="text-xs">
+											{t.label}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
+						<div className="flex shrink-0 flex-wrap gap-2">
+							<Button
+								type="button"
+								variant="outline"
+								size="sm"
+								className="h-9 gap-2"
+								onClick={() => copyToClipboard(initCommand, "init")}
+							>
+								{copied === "init" ? (
+									<Check className="size-3.5 text-emerald-500" />
+								) : (
+									<Copy className="size-3.5" />
+								)}
+								Copy init command
+							</Button>
+							<Button
+								type="button"
+								variant="outline"
+								size="sm"
+								className="h-9 gap-2"
+								onClick={() => copyToClipboard(componentsStub, "cj")}
+							>
+								{copied === "cj" ? (
+									<Check className="size-3.5 text-emerald-500" />
+								) : (
+									<Copy className="size-3.5" />
+								)}
+								Copy components.json stub
+							</Button>
+						</div>
+					</div>
+					<pre className="max-h-32 overflow-auto rounded-xl border border-border bg-zinc-950 p-3 font-mono text-[10px] text-zinc-300">
+						{initCommand}
+					</pre>
+					<p className="text-[10px] leading-relaxed text-muted-foreground">
+						After{" "}
+						<code className="rounded bg-muted px-1 font-mono">init</code>, set{" "}
+						<code className="rounded bg-muted px-1 font-mono">style</code> to{" "}
+						<code className="rounded bg-muted px-1 font-mono">
+							{UI_TEMPLATE_META[uiTemplate].componentsJsonStyle}
+						</code>{" "}
+						if the CLI does not match your choice, then paste the CSS from this
+						page into your globals.
+					</p>
+				</CardContent>
+			</Card>
+
+			<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
 				<div className="space-y-4">
 					<div className="flex items-center justify-between">
 						<div className="flex flex-col gap-1">
-							<Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+							<Label className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
 								CSS Variables
 							</Label>
-							<div className="flex items-center gap-1 mt-1">
+							<div className="mt-1 flex items-center gap-1">
 								<Button
+									type="button"
 									onClick={() => setVersion("v4")}
 									variant={version === "v4" ? "secondary" : "ghost"}
 									size="sm"
-									className="h-6 text-[9px] px-2 font-black uppercase tracking-widest"
+									className="h-6 px-2 text-[9px] font-black tracking-widest uppercase"
 								>
 									v4
 								</Button>
 								<Button
+									type="button"
 									onClick={() => setVersion("v3")}
 									variant={version === "v3" ? "secondary" : "ghost"}
 									size="sm"
-									className="h-6 text-[9px] px-2 font-black uppercase tracking-widest"
+									className="h-6 px-2 text-[9px] font-black tracking-widest uppercase"
 								>
 									v3
 								</Button>
@@ -156,21 +286,21 @@ export function CodePreview() {
 							className="h-8 gap-2"
 						>
 							{copied === "css" ? (
-								<Check className="w-3.5 h-3.5 text-emerald-500" />
+								<Check className="size-3.5 text-emerald-500" />
 							) : (
-								<Copy className="w-3.5 h-3.5" />
+								<Copy className="size-3.5" />
 							)}
 							{copied === "css" ? "Copied" : "Copy CSS"}
 						</Button>
 					</div>
-					<pre className="p-4 rounded-xl bg-zinc-950 text-zinc-300 text-[10px] font-mono overflow-auto max-h-[400px] border border-zinc-800 shadow-xl">
+					<pre className="max-h-[400px] overflow-auto rounded-xl border border-zinc-800 bg-zinc-950 p-4 font-mono text-[10px] text-zinc-300 shadow-xl">
 						{getCss(version)}
 					</pre>
 				</div>
 
 				<div className="space-y-4">
 					<div className="flex items-center justify-between">
-						<Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+						<Label className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
 							Theme JSON
 						</Label>
 						<Button
@@ -180,14 +310,14 @@ export function CodePreview() {
 							className="h-8 gap-2"
 						>
 							{copied === "json" ? (
-								<Check className="w-3.5 h-3.5 text-emerald-500" />
+								<Check className="size-3.5 text-emerald-500" />
 							) : (
-								<Copy className="w-3.5 h-3.5" />
+								<Copy className="size-3.5" />
 							)}
 							{copied === "json" ? "Copied" : "Copy JSON"}
 						</Button>
 					</div>
-					<pre className="p-4 rounded-xl bg-zinc-950 text-zinc-300 text-[10px] font-mono overflow-auto max-h-[400px] border border-zinc-800 shadow-xl">
+					<pre className="max-h-[400px] overflow-auto rounded-xl border border-zinc-800 bg-zinc-950 p-4 font-mono text-[10px] text-zinc-300 shadow-xl">
 						{getJson()}
 					</pre>
 				</div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, FileCode, Info, Zap } from "lucide-react";
+import { Check, Copy, FileCode } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,15 +11,23 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useThemeStore } from "@/lib/store";
+import {
+	getShadcnInitCommand,
+	UI_TEMPLATE_META,
+} from "@/lib/ui-template";
 import { cn } from "@/lib/utils";
 
 export function ExportDialog() {
-	const { config } = useThemeStore();
+	const { config, uiTemplate, scaffoldTemplate } = useThemeStore();
 	const [copied, setCopied] = useState(false);
+	const [copiedInit, setCopiedInit] = useState(false);
 	const [version, setVersion] = useState<"v3" | "v4">("v4");
+
+	const initCommand = getShadcnInitCommand({
+		uiTemplate,
+		scaffoldTemplate,
+	});
 
 	const getCssString = (v: "v3" | "v4") => {
 		if (v === "v4") {
@@ -60,6 +68,12 @@ export function ExportDialog() {
 		navigator.clipboard.writeText(cssString);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
+	};
+
+	const handleCopyInit = () => {
+		navigator.clipboard.writeText(initCommand);
+		setCopiedInit(true);
+		setTimeout(() => setCopiedInit(false), 2000);
 	};
 
 	// Helper to "highlight" the code for premium feel
@@ -114,11 +128,18 @@ export function ExportDialog() {
 				<div className="p-10 space-y-10">
 					<div className="flex items-end justify-between">
 						<div className="space-y-3">
-							<div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20">
-								<div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(59,130,246,1)]" />
-								<span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-									Version {version.toUpperCase()}
-								</span>
+							<div className="flex flex-wrap items-center gap-2">
+								<div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1">
+									<div className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(59,130,246,1)]" />
+									<span className="text-[10px] font-black tracking-[0.2em] text-primary uppercase">
+										CSS {version.toUpperCase()}
+									</span>
+								</div>
+								<div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+									<span className="text-[10px] font-bold tracking-wide text-zinc-400">
+										{UI_TEMPLATE_META[uiTemplate].label} · {scaffoldTemplate}
+									</span>
+								</div>
 							</div>
 							<DialogTitle className="text-5xl font-black tracking-[-0.05em] text-white">
 								Export <span className="text-zinc-500">Theme</span>
@@ -129,24 +150,26 @@ export function ExportDialog() {
 							</DialogDescription>
 						</div>
 
-						<div className="flex h-11 p-1 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+						<div className="flex h-11 rounded-2xl border border-white/10 bg-white/5 p-1 backdrop-blur-md">
 							<button
+								type="button"
 								onClick={() => setVersion("v4")}
 								className={cn(
-									"px-6 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300",
+									"rounded-xl px-6 text-[11px] font-black tracking-widest uppercase transition-all duration-300",
 									version === "v4"
-										? "bg-white text-black shadow-xl scale-[1.02]"
+										? "scale-[1.02] bg-white text-black shadow-xl"
 										: "text-zinc-500 hover:text-zinc-300",
 								)}
 							>
 								v4
 							</button>
 							<button
+								type="button"
 								onClick={() => setVersion("v3")}
 								className={cn(
-									"px-6 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300",
+									"rounded-xl px-6 text-[11px] font-black tracking-widest uppercase transition-all duration-300",
 									version === "v3"
-										? "bg-white text-black shadow-xl scale-[1.02]"
+										? "scale-[1.02] bg-white text-black shadow-xl"
 										: "text-zinc-500 hover:text-zinc-300",
 								)}
 							>
@@ -192,25 +215,45 @@ export function ExportDialog() {
 						</div>
 					</div>
 
-					<div className="flex items-center gap-6">
+					<div className="flex flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-6">
 						<Button
+							type="button"
 							onClick={handleCopy}
-							className="h-16 flex-1 rounded-[24px] bg-white text-black hover:bg-zinc-200 text-lg font-black tracking-tight shadow-[0_20px_40px_-15px_rgba(255,255,255,0.1)] transition-all active:scale-[0.98] group"
+							className="group h-16 flex-1 rounded-[24px] bg-white text-lg font-black tracking-tight text-black shadow-[0_20px_40px_-15px_rgba(255,255,255,0.1)] transition-all hover:bg-zinc-200 active:scale-[0.98]"
 						>
 							{copied ? (
 								<>
-									<Check className="w-6 h-6 mr-3 text-emerald-600 animate-in zoom-in spin-in duration-500" />
-									<span>Config Copied</span>
+									<Check className="mr-3 size-6 animate-in text-emerald-600 duration-500 zoom-in spin-in" />
+									<span>CSS copied</span>
 								</>
 							) : (
 								<>
-									<Copy className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" />
-									<span>Copy Everything</span>
+									<Copy className="mr-3 size-5 transition-transform group-hover:rotate-12" />
+									<span>Copy CSS</span>
 								</>
 							)}
 						</Button>
 
-						<div className="h-16 flex flex-col justify-center px-8 rounded-[24px] bg-white/5 border border-white/10 shrink-0">
+						<Button
+							type="button"
+							variant="outline"
+							onClick={handleCopyInit}
+							className="h-16 flex-1 rounded-[24px] border-white/20 bg-white/5 text-sm font-bold text-white hover:bg-white/10"
+						>
+							{copiedInit ? (
+								<>
+									<Check className="mr-2 size-5 text-emerald-400" />
+									Init command copied
+								</>
+							) : (
+								<>
+									<Copy className="mr-2 size-4 opacity-80" />
+									Copy shadcn init
+								</>
+							)}
+						</Button>
+
+						<div className="flex h-auto min-h-16 shrink-0 flex-col justify-center rounded-[24px] border border-white/10 bg-white/5 px-6 sm:px-8">
 							<div className="flex items-center gap-3">
 								<div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
 								<span className="text-[11px] font-black uppercase tracking-widest text-zinc-400">

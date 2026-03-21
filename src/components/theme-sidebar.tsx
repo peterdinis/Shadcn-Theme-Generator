@@ -3,6 +3,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
 	AlertTriangle,
+	Blocks,
 	Brush,
 	Check,
 	ChevronRight,
@@ -39,6 +40,7 @@ import { getContrastRatio } from "@/lib/color-utils";
 import { useThemeStore } from "@/lib/store";
 import { defaultThemes } from "@/lib/themes";
 import type { ThemeColorName } from "@/lib/types";
+import { UI_TEMPLATE_META, type UiTemplate } from "@/lib/ui-template";
 import { cn } from "@/lib/utils";
 import { ColorPicker } from "./color-picker";
 
@@ -90,8 +92,16 @@ const colorGroups: {
 ];
 
 export function ThemeSidebar() {
-	const { config, updateColor, setRadius, setFont, applyPreset, reset } =
-		useThemeStore();
+	const {
+		config,
+		updateColor,
+		setRadius,
+		setFont,
+		applyPreset,
+		reset,
+		uiTemplate,
+		setUiTemplate,
+	} = useThemeStore();
 	const { theme, setTheme, resolvedTheme } = useTheme();
 
 	const [mounted, setMounted] = useState(false);
@@ -210,6 +220,46 @@ export function ThemeSidebar() {
 								<Monitor className="mr-1 size-3.5" />
 								Auto
 							</Button>
+						</div>
+					</CardContent>
+				</Card>
+
+				<Card size="sm" className="border-border/70 bg-muted/15 shadow-none">
+					<CardHeader className="pb-2">
+						<CardTitle className="flex items-center gap-2 text-sm">
+							<Blocks className="size-3.5 text-primary" />
+							Shadcn template
+						</CardTitle>
+						<CardDescription className="text-xs leading-relaxed">
+							Primitives for new projects:{" "}
+							<code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">
+								shadcn init --base …
+							</code>
+							. Pick the stack you will install; export and code tabs use this.
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-2">
+						<div className="grid grid-cols-2 gap-2">
+							{(["base", "radix"] as const satisfies readonly UiTemplate[]).map(
+								(key) => (
+									<Button
+										key={key}
+										type="button"
+										variant={uiTemplate === key ? "default" : "outline"}
+										size="sm"
+										className={cn(
+											"h-auto min-h-10 flex-col gap-0.5 py-2 text-xs font-semibold",
+											uiTemplate === key && "shadow-sm",
+										)}
+										onClick={() => setUiTemplate(key)}
+									>
+										<span>{UI_TEMPLATE_META[key].label}</span>
+										<span className="max-w-full truncate font-mono text-[9px] font-normal text-muted-foreground">
+											{UI_TEMPLATE_META[key].packageName}
+										</span>
+									</Button>
+								),
+							)}
 						</div>
 					</CardContent>
 				</Card>
