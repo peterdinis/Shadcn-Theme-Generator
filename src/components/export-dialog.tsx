@@ -218,7 +218,7 @@ export function ExportDialog() {
 								</span>
 							</div>
 							<span className="text-[10px] text-zinc-600 font-bold">
-								SHA: {Math.random().toString(36).substring(7).toUpperCase()}
+								{config.name}
 							</span>
 						</div>
 					</div>

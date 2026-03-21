@@ -18,7 +18,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 export const metadata: Metadata = {
 	title: "Hyper-Premium Shadcn UI Theme Generator | Tailwind v3 & v4",
 	description:
-		"The ultimate developer tool for generating, previewing, and exporting Shadcn UI themes. Supports Tailwind v3 and v4, 14+ premium presets, and custom Google Fonts.",
+		"The ultimate developer tool for generating, previewing, and exporting Shadcn UI themes. Supports Tailwind v3 and v4, 20+ presets, and custom Google Fonts.",
 	keywords: [
 		"shadcn ui",
 		"theme generator",

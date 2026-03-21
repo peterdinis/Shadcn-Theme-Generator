@@ -30,8 +30,8 @@ ${getCssVars("light")}
     .dark {
 ${getCssVars("dark")}
     }
-    * {
-      font-family: var(--font-family), ui-sans-serif, system-ui, sans-serif !important;
+    body {
+      font-family: var(--font-family), ui-sans-serif, system-ui, sans-serif;
     }
   `;
 

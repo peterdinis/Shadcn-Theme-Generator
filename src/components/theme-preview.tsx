@@ -12,11 +12,9 @@ import {
 	Mail,
 	Palette,
 	Plus,
-	RotateCcw,
 	Search,
 	Settings,
 	User,
-	Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -55,49 +53,51 @@ export function ThemePreview() {
 		setTimeout(() => setShowToast(false), 3000);
 	};
 
+	const { config } = useThemeStore();
+
 	return (
-		<div className="flex-1 overflow-y-auto p-4 md:p-8 bg-zinc-50/50 dark:bg-zinc-950/30 relative">
-			<div className="max-w-5xl mx-auto space-y-8">
-				<div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+		<div className="relative min-h-0 min-h-[55vh] flex-1 overflow-y-auto bg-muted/25 p-4 md:min-h-0 md:p-8">
+			<div className="mx-auto max-w-5xl space-y-8">
+				<div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
 					<div>
-						<div className="flex items-center gap-2 mb-2">
-							<span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary text-primary-foreground uppercase tracking-widest">
-								v1.2.0
+						<div className="mb-2 flex flex-wrap items-center gap-2">
+							<span className="rounded bg-primary px-2 py-0.5 text-[10px] font-bold tracking-widest text-primary-foreground uppercase">
+								Live
 							</span>
-							<span className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
-								Design System
+							<span className="text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
+								{config.name}
 							</span>
 						</div>
-						<h1 className="text-4xl font-black tracking-tight mb-2">
-							Theme Preview
+						<h1 className="mb-2 text-3xl font-black tracking-tight md:text-4xl">
+							Theme preview
 						</h1>
-						<p className="text-muted-foreground text-lg max-w-xl">
-							Real-time visualization of your shadcn/ui components with premium
-							styling and OKLCH colors.
+						<p className="max-w-xl text-base text-muted-foreground md:text-lg">
+							Components and layouts update as you edit tokens—OKLCH variables,
+							typography, and radius stay in sync.
 						</p>
 					</div>
-					<div className="flex items-center gap-3">
+					<div className="flex shrink-0 items-center gap-3">
 						<ExportDialog />
 					</div>
 				</div>
 
-				<Tabs defaultValue="preview" className="w-full space-y-8">
-					<TabsList className="bg-muted/50 p-1">
-						<TabsTrigger value="preview" className="px-6 gap-2">
-							<LayoutDashboard className="w-4 h-4" />
+				<Tabs defaultValue="preview" className="w-full space-y-6 md:space-y-8">
+					<TabsList className="h-auto w-full flex-wrap justify-start gap-1 bg-muted/50 p-1 md:inline-flex md:w-auto md:flex-nowrap">
+						<TabsTrigger value="preview" className="gap-2 px-4 md:px-6">
+							<LayoutDashboard className="size-4" />
 							Components
 						</TabsTrigger>
-						<TabsTrigger value="data-table" className="px-6 gap-2">
-							<Layers className="w-4 h-4" />
-							Data Table
+						<TabsTrigger value="data-table" className="gap-2 px-4 md:px-6">
+							<Layers className="size-4" />
+							Data table
 						</TabsTrigger>
-						<TabsTrigger value="palette" className="px-6 gap-2">
-							<Palette className="w-4 h-4" />
-							Palette Grid
+						<TabsTrigger value="palette" className="gap-2 px-4 md:px-6">
+							<Palette className="size-4" />
+							Palette
 						</TabsTrigger>
-						<TabsTrigger value="code" className="px-6 gap-2">
-							<Settings className="w-4 h-4" />
-							Code & Export
+						<TabsTrigger value="code" className="gap-2 px-4 md:px-6">
+							<Settings className="size-4" />
+							Code
 						</TabsTrigger>
 					</TabsList>
 

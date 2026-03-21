@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatOklch, hexToOklch, oklchToHex } from "@/lib/color-utils";
@@ -18,21 +17,23 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
 	const displayLabel = label.replace("-", " ");
 
 	return (
-		<div className="flex items-center justify-between gap-4 py-2">
+		<div className="flex items-center justify-between gap-3 rounded-md py-1.5 pl-1 pr-0 transition-colors hover:bg-muted/40">
 			<Label
-				className="text-sm font-medium capitalize truncate"
+				className="min-w-0 flex-1 truncate text-xs font-medium capitalize text-foreground"
 				title={displayLabel}
 			>
 				{displayLabel}
 			</Label>
-			<div className="flex items-center gap-2 shrink-0">
+			<div className="flex shrink-0 items-center gap-2">
 				<Input
 					type="text"
 					value={formatOklch(value)}
 					onChange={(e) => onChange(e.target.value)}
-					className="w-36 h-8 text-[11px] font-mono"
+					className="h-8 w-[min(100%,9.5rem)] text-[11px] font-mono"
+					aria-label={`OKLCH value for ${displayLabel}`}
+					spellCheck={false}
 				/>
-				<div className="relative w-8 h-8 rounded-md overflow-hidden border border-border shadow-sm shrink-0">
+				<div className="relative size-8 shrink-0 overflow-hidden rounded-md border border-border shadow-sm">
 					<input
 						type="color"
 						value={hexValue}
