@@ -12,6 +12,7 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { ThemeInjector } from "@/components/theme-injector";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -67,6 +68,7 @@ export default function RootLayout({
 				>
 					<ThemeInjector />
 					{children}
+					<ScrollToTop />
 				</ThemeProvider>
 			</body>
 		</html>

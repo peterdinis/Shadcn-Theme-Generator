@@ -56,7 +56,10 @@ export function ThemePreview() {
 	const { config } = useThemeStore();
 
 	return (
-		<div className="relative min-h-0 min-h-[55vh] flex-1 overflow-y-auto bg-muted/25 p-4 md:min-h-0 md:p-8">
+		<div
+			className="relative min-h-0 min-h-[55vh] flex-1 overflow-y-auto bg-muted/25 p-4 md:min-h-0 md:p-8"
+			data-app-scroll
+		>
 			<div className="mx-auto max-w-5xl space-y-8">
 				<div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
 					<div>

@@ -174,7 +174,10 @@ export function ThemeSidebar() {
 				</div>
 			</header>
 
-			<div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 pb-8 md:px-5">
+			<div
+				className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 pb-8 md:px-5"
+				data-app-scroll
+			>
 				<Card size="sm" className="border-border/70 bg-muted/15 shadow-none">
 					<CardHeader className="pb-2">
 						<CardTitle className="text-sm">Appearance</CardTitle>
