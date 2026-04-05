@@ -62,6 +62,9 @@ const fonts = [
 	"Newsreader",
 	"Plus Jakarta Sans",
 	"Syne",
+	"Orbitron",
+	"Cormorant Garamond",
+	"Fira Code",
 ];
 
 const colorGroups: {
@@ -69,27 +72,27 @@ const colorGroups: {
 	colors: ThemeColorName[];
 	icon: LucideIcon;
 }[] = [
-	{ name: "Base", colors: ["background", "foreground"], icon: Layers },
-	{ name: "Brand", colors: ["primary", "primary-foreground"], icon: Zap },
-	{
-		name: "Secondary",
-		colors: ["secondary", "secondary-foreground"],
-		icon: Brush,
-	},
-	{ name: "Muted", colors: ["muted", "muted-foreground"], icon: Palette },
-	{ name: "Accent", colors: ["accent", "accent-foreground"], icon: Palette },
-	{
-		name: "Destructive",
-		colors: ["destructive", "destructive-foreground"],
-		icon: AlertTriangle,
-	},
-	{
-		name: "Surface",
-		colors: ["card", "card-foreground", "popover", "popover-foreground"],
-		icon: Layers,
-	},
-	{ name: "UI", colors: ["border", "input", "ring"], icon: Monitor },
-];
+		{ name: "Base", colors: ["background", "foreground"], icon: Layers },
+		{ name: "Brand", colors: ["primary", "primary-foreground"], icon: Zap },
+		{
+			name: "Secondary",
+			colors: ["secondary", "secondary-foreground"],
+			icon: Brush,
+		},
+		{ name: "Muted", colors: ["muted", "muted-foreground"], icon: Palette },
+		{ name: "Accent", colors: ["accent", "accent-foreground"], icon: Palette },
+		{
+			name: "Destructive",
+			colors: ["destructive", "destructive-foreground"],
+			icon: AlertTriangle,
+		},
+		{
+			name: "Surface",
+			colors: ["card", "card-foreground", "popover", "popover-foreground"],
+			icon: Layers,
+		},
+		{ name: "UI", colors: ["border", "input", "ring"], icon: Monitor },
+	];
 
 export function ThemeSidebar() {
 	const {
@@ -257,7 +260,7 @@ export function ThemeSidebar() {
 										onClick={() => setUiTemplate(key)}
 									>
 										<span>{UI_TEMPLATE_META[key].label}</span>
-										<span className="max-w-full truncate font-mono text-[9px] font-normal text-muted-foreground">
+										<span className="max-w-full truncate font-mono text-[9px] font-normal">
 											{UI_TEMPLATE_META[key].packageName}
 										</span>
 									</Button>
@@ -300,7 +303,7 @@ export function ThemeSidebar() {
 										className={cn(
 											"h-9 w-full justify-start border-transparent bg-background/60 px-3 hover:border-primary/40",
 											config.name === preset.name &&
-												"border-primary bg-primary/5 ring-1 ring-primary/20",
+											"border-primary bg-primary/5 ring-1 ring-primary/20",
 										)}
 										onClick={() => applyPreset(key)}
 									>
