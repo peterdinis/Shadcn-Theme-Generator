@@ -15,6 +15,9 @@ interface ThemeState {
 	setRadius: (radius: number) => void;
 	setFont: (font: string) => void;
 	applyPreset: (presetKey: string) => void;
+	saveCustomTheme: (name: string) => void;
+	deleteCustomTheme: (name: string) => void;
+	customThemes: ThemeConfig[];
 	reset: () => void;
 	uiTemplate: UiTemplate;
 	setUiTemplate: (t: UiTemplate) => void;
@@ -52,11 +55,37 @@ export const useThemeStore = create<ThemeState>()(
 					},
 				})),
 			applyPreset: (presetKey) => {
-				const preset = defaultThemes[presetKey];
+				const state = useThemeStore.getState();
+				const preset =
+					defaultThemes[presetKey] ||
+					state.customThemes.find((t) => t.name === presetKey);
 				if (preset) {
 					set({ config: preset });
 				}
 			},
+			saveCustomTheme: (name) => {
+				set((state) => {
+					const existingIndex = state.customThemes.findIndex(
+						(t) => t.name === name,
+					);
+					const newTheme = { ...state.config, name };
+					if (existingIndex >= 0) {
+						const newThemes = [...state.customThemes];
+						newThemes[existingIndex] = newTheme;
+						return { customThemes: newThemes, config: newTheme };
+					}
+					return {
+						customThemes: [...state.customThemes, newTheme],
+						config: newTheme,
+					};
+				});
+			},
+			deleteCustomTheme: (name) => {
+				set((state) => ({
+					customThemes: state.customThemes.filter((t) => t.name !== name),
+				}));
+			},
+			customThemes: [],
 			reset: () => set({ config: defaultThemes.zinc }),
 			uiTemplate: "base",
 			setUiTemplate: (uiTemplate) => set({ uiTemplate }),

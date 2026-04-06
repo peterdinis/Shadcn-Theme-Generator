@@ -8,12 +8,16 @@ import {
 	Check,
 	ChevronRight,
 	Layers,
+	Menu,
 	Monitor,
 	Moon,
 	Palette,
 	RotateCcw,
+	Save,
 	Search,
 	Sun,
+	Trash2,
+	X,
 	Zap,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -26,6 +30,15 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -101,6 +114,9 @@ export function ThemeSidebar() {
 		setRadius,
 		setFont,
 		applyPreset,
+		saveCustomTheme,
+		deleteCustomTheme,
+		customThemes,
 		reset,
 		uiTemplate,
 		setUiTemplate,
@@ -109,6 +125,9 @@ export function ThemeSidebar() {
 
 	const [mounted, setMounted] = useState(false);
 	const [presetQuery, setPresetQuery] = useState("");
+	const [saveOpen, setSaveOpen] = useState(false);
+	const [newThemeName, setNewThemeName] = useState("");
+	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 	const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
 		Object.fromEntries(colorGroups.map((g) => [g.name, true])),
 	);
@@ -117,10 +136,18 @@ export function ThemeSidebar() {
 
 	const filteredPresets = useMemo(() => {
 		const q = presetQuery.trim().toLowerCase();
-		return Object.entries(defaultThemes).filter(([, preset]) =>
+		const allPresets = [
+			...Object.entries(defaultThemes).map(
+				([k, v]) => [k, v, false] as [string, typeof config, boolean],
+			),
+			...customThemes.map(
+				(t) => [t.name, t, true] as [string, typeof config, boolean],
+			),
+		];
+		return allPresets.filter(([, preset]) =>
 			q ? preset.name.toLowerCase().includes(q) : true,
 		);
-	}, [presetQuery]);
+	}, [presetQuery, customThemes]);
 
 	const setAllGroupsOpen = (open: boolean) => {
 		setOpenGroups(Object.fromEntries(colorGroups.map((g) => [g.name, open])));
@@ -146,7 +173,8 @@ export function ThemeSidebar() {
 	return (
 		<aside
 			className={cn(
-				"flex h-[min(44vh,420px)] w-full shrink-0 flex-col overflow-hidden border-b border-border bg-card md:h-full md:w-[min(100%,400px)] md:max-w-[400px] md:border-r md:border-b-0",
+				"flex w-full shrink-0 flex-col overflow-hidden border-b border-border bg-card transition-all md:h-full md:w-[min(100%,400px)] md:max-w-[400px] md:border-r md:border-b-0",
+				isSidebarOpen ? "h-[min(55vh,420px)] md:h-full" : "h-[73px] md:h-full"
 			)}
 		>
 			<header className="z-20 shrink-0 space-y-3 border-b border-border bg-card/90 px-4 py-4 backdrop-blur-md md:px-5">
@@ -164,21 +192,90 @@ export function ThemeSidebar() {
 							</p>
 						</div>
 					</div>
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={reset}
-						title="Reset to Zinc default"
-						className="shrink-0 hover:bg-destructive/10 hover:text-destructive"
-						aria-label="Reset theme to Zinc default"
-					>
-						<RotateCcw className="size-4" />
-					</Button>
+					<div className="flex gap-1 shrink-0">
+						<Dialog open={saveOpen} onOpenChange={setSaveOpen}>
+							<DialogTrigger
+								render={
+									<Button
+										variant="ghost"
+										size="icon"
+										title="Save as custom theme"
+										className="shrink-0 hover:bg-primary/10 hover:text-primary"
+									>
+										<Save className="size-4" />
+									</Button>
+								}
+							/>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>Save Custom Theme</DialogTitle>
+									<DialogDescription>
+										Give your customized theme a name to save it to your presets.
+									</DialogDescription>
+								</DialogHeader>
+								<div className="space-y-4 py-4">
+									<div className="space-y-2">
+										<Label htmlFor="theme-name">Theme Name</Label>
+										<Input
+											id="theme-name"
+											value={newThemeName}
+											onChange={(e) => setNewThemeName(e.target.value)}
+											placeholder="My Awesome Theme"
+											autoFocus
+											onKeyDown={(e) => {
+												if (e.key === "Enter" && newThemeName.trim()) {
+													saveCustomTheme(newThemeName.trim());
+													setSaveOpen(false);
+													setNewThemeName("");
+												}
+											}}
+										/>
+									</div>
+								</div>
+								<DialogFooter>
+									<Button
+										onClick={() => {
+											if (newThemeName.trim()) {
+												saveCustomTheme(newThemeName.trim());
+												setSaveOpen(false);
+												setNewThemeName("");
+											}
+										}}
+									>
+										Save
+									</Button>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={reset}
+							title="Reset to Zinc default"
+							className="shrink-0 hover:bg-destructive/10 hover:text-destructive"
+							aria-label="Reset theme to Zinc default"
+						>
+							<RotateCcw className="size-4" />
+						</Button>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+							title={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+							className="shrink-0 md:hidden hover:bg-muted"
+							aria-label="Toggle sidebar"
+						>
+							{isSidebarOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+						</Button>
+					</div>
 				</div>
 			</header>
 
 			<div
-				className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 pb-8 md:px-5"
+				className={cn(
+					"min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 pb-8 md:px-5",
+					!isSidebarOpen && "hidden md:block"
+				)}
 				data-app-scroll
 			>
 				<Card size="sm" className="border-border/70 bg-muted/15 shadow-none">
@@ -295,29 +392,41 @@ export function ThemeSidebar() {
 									No presets match “{presetQuery}”.
 								</p>
 							) : (
-								filteredPresets.map(([key, preset]) => (
-									<Button
-										key={key}
-										variant="outline"
-										size="sm"
-										className={cn(
-											"h-9 w-full justify-start border-transparent bg-background/60 px-3 hover:border-primary/40",
-											config.name === preset.name &&
-											"border-primary bg-primary/5 ring-1 ring-primary/20",
+								filteredPresets.map(([key, preset, isCustom]) => (
+									<div key={key} className="flex gap-1">
+										<Button
+											variant="outline"
+											size="sm"
+											className={cn(
+												"h-9 flex-1 justify-start border-transparent bg-background/60 px-3 hover:border-primary/40",
+												config.name === preset.name &&
+													"border-primary bg-primary/5 ring-1 ring-primary/20",
+											)}
+											onClick={() => applyPreset(key)}
+										>
+											<span
+												className="mr-2 size-3 shrink-0 rounded-full shadow-inner ring-1 ring-black/5"
+												style={{
+													backgroundColor: preset[currentMode].primary,
+												}}
+												aria-hidden
+											/>
+											<span className="truncate text-xs font-medium">
+												{preset.name}
+											</span>
+										</Button>
+										{isCustom && (
+											<Button
+												variant="ghost"
+												size="icon"
+												className="h-9 w-9 shrink-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+												onClick={() => deleteCustomTheme(preset.name)}
+												title={`Delete ${preset.name}`}
+											>
+												<Trash2 className="size-4" />
+											</Button>
 										)}
-										onClick={() => applyPreset(key)}
-									>
-										<span
-											className="mr-2 size-3 shrink-0 rounded-full shadow-inner ring-1 ring-black/5"
-											style={{
-												backgroundColor: preset[currentMode].primary,
-											}}
-											aria-hidden
-										/>
-										<span className="truncate text-xs font-medium">
-											{preset.name}
-										</span>
-									</Button>
+									</div>
 								))
 							)}
 						</div>
