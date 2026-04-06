@@ -223,7 +223,7 @@ export function ThemePreview() {
 													</SelectContent>
 												</Select>
 											</div>
-											<div className="flex items-center justify-between pt-4 border-t border-border/50">
+											<div className="flex items-center justify-between gap-4 pt-4 border-t border-border/50">
 												<div className="space-y-0.5">
 													<Label className="text-sm font-bold">Auto-sync</Label>
 													<p className="text-[10px] text-muted-foreground">
@@ -250,7 +250,7 @@ export function ThemePreview() {
 										</CardHeader>
 										<CardContent>
 											<Tabs defaultValue="all" className="w-full">
-												<TabsList className="grid w-full grid-cols-3 mb-6 bg-muted/50 p-1 h-8">
+												<TabsList className="grid w-full grid-cols-3 mb-6 bg-muted/50 p-1 h-auto min-h-8">
 													<TabsTrigger
 														value="all"
 														className="text-[10px] uppercase font-bold"
@@ -450,9 +450,9 @@ export function ThemePreview() {
 						value="data-table"
 						className="animate-in fade-in slide-in-from-bottom-4 duration-500"
 					>
-						<Card className="p-8 border-border/50 bg-card/50 shadow-xl">
+						<Card className="p-4 md:p-8 border-border/50 bg-card/50 shadow-xl">
 							<div className="space-y-4">
-								<div className="flex items-center justify-between">
+								<div className="flex flex-col gap-4 md:flex-row md:items-center justify-between">
 									<div className="space-y-1">
 										<h3 className="text-xl font-bold">Transaction History</h3>
 										<p className="text-sm text-muted-foreground">

@@ -125,8 +125,8 @@ export function ExportDialog() {
 				{/* Animated Accent Line */}
 				<div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
-				<div className="p-10 space-y-10">
-					<div className="flex items-end justify-between">
+				<div className="p-6 md:p-10 space-y-6 md:space-y-10 max-h-[85vh] overflow-y-auto overflow-x-hidden md:max-h-none">
+					<div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 						<div className="space-y-3">
 							<div className="flex flex-wrap items-center gap-2">
 								<div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1">
@@ -141,10 +141,10 @@ export function ExportDialog() {
 									</span>
 								</div>
 							</div>
-							<DialogTitle className="text-5xl font-black tracking-[-0.05em] text-white">
+							<DialogTitle className="text-3xl md:text-5xl font-black tracking-[-0.05em] text-white">
 								Export <span className="text-zinc-500">Theme</span>
 							</DialogTitle>
-							<DialogDescription className="text-base text-zinc-400 font-medium max-w-md leading-relaxed">
+							<DialogDescription className="text-sm md:text-base text-zinc-400 font-medium max-w-md leading-relaxed">
 								Your production-ready CSS variables are ready. Optimized for
 								performance and readability.
 							</DialogDescription>
@@ -180,7 +180,7 @@ export function ExportDialog() {
 
 					<div className="relative group">
 						{/* Glossy Window Header */}
-						<div className="flex items-center justify-between px-6 py-4 rounded-t-[24px] bg-white/5 border-x border-t border-white/10 border-b-0 backdrop-blur-xl">
+						<div className="hidden sm:flex items-center justify-between px-6 py-4 rounded-t-[24px] bg-white/5 border-x border-t border-white/10 border-b-0 backdrop-blur-xl">
 							<div className="flex gap-2">
 								<div className="w-3 h-3 rounded-full bg-zinc-800" />
 								<div className="w-3 h-3 rounded-full bg-zinc-800" />
@@ -196,8 +196,8 @@ export function ExportDialog() {
 						</div>
 
 						{/* Simulated Editor */}
-						<div className="p-8 bg-black/60 border-x border-white/10 border-b rounded-b-[24px] relative min-h-[300px] max-h-[450px] overflow-auto scrollbar-thin">
-							<pre className="text-[13px] font-mono leading-relaxed antialiased selection:bg-primary/30 selection:text-white">
+						<div className="p-4 sm:p-8 bg-black/60 sm:border-x border-y sm:border-t-0 border-white/10 rounded-xl sm:rounded-none sm:rounded-b-[24px] relative min-h-[300px] max-h-[350px] md:max-h-[450px] overflow-auto scrollbar-thin">
+							<pre className="text-[11px] sm:text-[13px] font-mono leading-relaxed antialiased selection:bg-primary/30 selection:text-white">
 								<code style={{ fontFamily: "'JetBrains Mono', monospace" }}>
 									{highlightCode(cssString)}
 								</code>
@@ -268,7 +268,7 @@ export function ExportDialog() {
 				</div>
 
 				{/* Premium Footer */}
-				<div className="px-10 py-5 bg-white/[0.02] border-t border-white/5 flex items-center justify-between">
+				<div className="px-6 md:px-10 py-5 bg-white/[0.02] border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 hidden sm:flex">
 					<div className="flex items-center gap-4">
 						<div className="flex -space-x-2">
 							{[1, 2, 3].map((i) => (

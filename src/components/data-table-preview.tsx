@@ -41,8 +41,8 @@ const invoices = [
 
 export function DataTablePreview() {
 	return (
-		<div className="rounded-md border">
-			<Table>
+		<div className="rounded-md border overflow-x-auto">
+			<Table className="min-w-[400px]">
 				<TableHeader>
 					<TableRow>
 						<TableHead className="w-[100px]">Invoice</TableHead>
