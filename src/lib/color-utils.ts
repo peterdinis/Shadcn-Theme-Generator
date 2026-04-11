@@ -1,4 +1,4 @@
-import { formatCss, formatHex, oklch, wcagContrast } from "culori";
+import { formatHex, oklch, wcagContrast } from "culori";
 
 // Ensure color string is valid before converting
 export function parseColor(color: string) {
